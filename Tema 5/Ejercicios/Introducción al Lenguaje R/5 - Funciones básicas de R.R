@@ -15,7 +15,7 @@ divisor <- 3
 if ((dividendo %% divisor) == 0) {
     print(paste(dividendo, "es divisible por", divisor))
 } else {
-   print(paste(dividendo, "no es divisible por", divisor))
+    print(paste(dividendo, "no es divisible por", divisor))
 }
 
 # 3.- Construya un vector con los números enteros del 2 al 87. ¿Cuáles de esos
@@ -58,7 +58,7 @@ prod(a)
 a <- seq(from = 7, to = 3)
 sum(exp(a))
 
-# 9.- Evaluar la siguiente productoria ∏(i=10)(i=1)logvi
+# 9.- Evaluar la siguiente productoria ∏(i=10)(i=1)log√i
 
 a <- seq(from = 10, to = 1)
 prod(log10(sqrt(a)))
@@ -68,7 +68,8 @@ prod(log10(sqrt(a)))
 # Compare su resultado con el de la función rev
 
 a <- c(1, 5, 7, 6, 8, 9, 4, 3)
-print(a[length(a):1])
+b <- a[length(a):1]
+print(b == rev(a))
 
 # 11.- Create the vector: 1,2,3,…,19,20
 
@@ -93,8 +94,8 @@ a <- rep(a, times = 12)
 seq1 <- seq(from = 1, to = 12) * 3
 seq2 <- seq(from = 1, to = 34, by = 3)
 
-a[which(a == 0.1)] <- a[which(a == 0.1)] ^ seq1
-a[which(a == 0.2)] <- a[which(a == 0.2)] ^ seq2
+a[which(a == 0.1)] <- a[which(a == 0.1)]^seq1
+a[which(a == 0.2)] <- a[which(a == 0.2)]^seq2
 
 print(a)
 
