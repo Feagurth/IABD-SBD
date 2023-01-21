@@ -4,13 +4,13 @@
 # obtenidos con la del Cuadro 8.2 fuente.
 
 datos_tab <- read.table(
-    file = "8-2 - Datos Personales.txt",
+    file = "08-2 - Datos Personales.txt",
     header = TRUE,
     sep = "\t"
 )
 
 datos_csv <- read.table(
-    file = "8-2 - Datos Personales.csv",
+    file = "08-2 - Datos Personales.csv",
     header = TRUE,
     sep = ","
 )
