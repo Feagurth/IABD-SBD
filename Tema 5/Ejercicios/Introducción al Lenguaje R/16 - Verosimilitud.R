@@ -48,7 +48,7 @@ if (aic_fit1[1] < aic_fit2[1]) {
 # responda lo siguiente.
 # Suponga que el número de satélites sobre cada hembra es una variable que
 # se distribuye Poisson. Construya en R la función de log-verosimilitud l,
-# dibuje la función l y encuentre el estimador de máxima verosimilitud de λ.
+# dibuje la función l y encuentre el estimador de máxima verosimilitud de <U+03BB>.
 
 
 url <- "https://raw.githubusercontent.com/fhernanb/datos/master/crab"
@@ -65,8 +65,9 @@ ll1 <- Vectorize(ll1)
 
 curve(ll1,
     lwd = 4, col = "dodgerblue3",
-    xlab = "λ", las = 1,
-    ylab = "l(λ)")
+    xlab = "<U+03BB>", las = 1,
+    ylab = "l(<U+03BB>)"
+)
 
 grid()
 
@@ -79,9 +80,9 @@ print(fit3)
 
 ll1 <- function(valor) {
     sum(dnbinom(
-        x = cangrejos$Sa, size = length(cangrejos$Sa), prob = valor, 
-        log = TRUE)
-    )
+        x = cangrejos$Sa, size = length(cangrejos$Sa), prob = valor,
+        log = TRUE
+    ))
 }
 
 ll1 <- Vectorize(ll1)
@@ -89,7 +90,8 @@ ll1 <- Vectorize(ll1)
 curve(ll1,
     lwd = 4, col = "dodgerblue3",
     xlab = "x", las = 1,
-    ylab = "F(x)")
+    ylab = "F(x)"
+)
 
 grid()
 
@@ -133,9 +135,11 @@ if (aic_fit3[1] < aic_fit4[1]) {
 url <- "https://raw.githubusercontent.com/fhernanb/datos/master/aptos2015"
 apartamentos <- read.table(file = url, header = TRUE)
 
-plot(density(apartamentos$mt2), lwd = 3, col = "blue",
-     xlim = range(apartamentos$mt2), main = "", las = 1,
-     xlab = "Mt2", ylab = "Densidad")
+plot(density(apartamentos$mt2),
+    lwd = 3, col = "blue",
+    xlim = range(apartamentos$mt2), main = "", las = 1,
+    xlab = "Mt2", ylab = "Densidad"
+)
 
 print("Según el gráfico se puede observar que hay una mayor cantidad de pisos
 que tienen una media de 100 metros cuadrados")
@@ -143,7 +147,29 @@ que tienen una media de 100 metros cuadrados")
 # ¿Qué distribuciones de 2 parámetros podrían explicar el comportamiento
 # del área de los apartamentos? Mencione al menos 3.
 
+apartamentos_tmp <- apartamentos
+apartamentos_tmp$ubicacion <- sapply(
+    as.factor(apartamentos_tmp$ubicacion),
+    unclass
+)
+apartamentos_tmp$balcon <- sapply(
+    as.factor(apartamentos_tmp$balcon),
+    unclass)
 
+apartamentos_tmp$parqueadero <- sapply(
+    as.factor(apartamentos_tmp$parqueadero),
+    unclass)
+
+apartamentos_tmp$terminado <- sapply(
+    as.factor(apartamentos_tmp$terminado),
+    unclass)
+
+print(cor(apartamentos_tmp, method = "spearman"))
+
+print("A partir de la inspección de las correlaciones de los datos se
+puede deducir que las variables más importantes para evaluar el precio
+de la vivienda son los metros cuadrados de la misma, el valor del mismo
+en la escritura y el estrato o  nivel socieconomico donde está el apartamento")
 
 # Para cada una de las distribuciones anteriores dibuje un gráfico de
 # contornos o calor para la función de log-verosimilitud y estime los
