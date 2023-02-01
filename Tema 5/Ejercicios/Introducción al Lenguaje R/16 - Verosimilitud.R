@@ -176,6 +176,30 @@ en la escritura y el estrato o  nivel socieconomico donde está el apartamento")
 # parámetros de la distribución elegida.
 
 
+# Definimos la función de log-verosimilitud
+ll1 <- function(param) {
+  sum(dnorm(
+    x = apartamentos_tmp$mt2, log = TRUE, sd = param
+  ))
+}
+
+# La vectorizamos
+ll1 <- Vectorize(ll1)
+
+# Mostramos su gráfica
+curve(ll1,
+      lwd = 4, col = "dodgerblue3"
+)
+
+
+
+heatmap(ll1)
+
+
+
+#heatmap(cor(apartamentos_tmp[,c('precio', 'mt2', 'avaluo', 'estrato')]))
+
+
 # ¿Cuál de los dos modelos es más apropiado para explicar la variable de
 # interés? Calcule el AIC para decidir.
 
