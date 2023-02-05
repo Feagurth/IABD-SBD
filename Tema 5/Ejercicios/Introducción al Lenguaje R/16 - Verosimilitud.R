@@ -3,7 +3,6 @@
 # siguiente.
 # Si se asume que la edad tiene distribución normal, ¿cuáles son los
 # estimadores de máxima verosimilitud para µ y s?
-
 url <- "https://raw.githubusercontent.com/fhernanb/datos/master/medidas_cuerpo"
 cuerpos <- read.table(file = url, header = TRUE)
 
@@ -73,7 +72,6 @@ grid()
 
 fit3 <- fitdistr(x = cangrejos$Sa, densfun = "poisson")
 print(fit3)
-
 
 # Repita el ejercicio anterior asumiendo que el número de satélites se
 # distribuye binomial negativo.
@@ -154,16 +152,16 @@ apartamentos_tmp$ubicacion <- sapply(
 )
 apartamentos_tmp$balcon <- sapply(
     as.factor(apartamentos_tmp$balcon),
-    unclass)
-
+    unclass
+)
 apartamentos_tmp$parqueadero <- sapply(
     as.factor(apartamentos_tmp$parqueadero),
-    unclass)
-
+    unclass
+)
 apartamentos_tmp$terminado <- sapply(
     as.factor(apartamentos_tmp$terminado),
-    unclass)
-
+    unclass
+)
 print(cor(apartamentos_tmp, method = "spearman"))
 
 print("A partir de la inspección de las correlaciones de los datos se
@@ -175,34 +173,71 @@ en la escritura y el estrato o  nivel socieconomico donde está el apartamento")
 # contornos o calor para la función de log-verosimilitud y estime los
 # parámetros de la distribución elegida.
 
+# Cargar la librería MASS
+library(MASS)
 
-# Definimos la función de log-verosimilitud
-ll1 <- function(param) {
-  sum(dnorm(
-    x = apartamentos_tmp$mt2, log = TRUE, sd = param
-  ))
-}
+# Dibujar un gráfico de contornos para la función de log-verosimilitud
+# de la distribución normal de metros cuadrados de los  apartamentos
+fit1 <- fitdistr(x = apartamentos$mt2, densfun = "normal")
 
-# La vectorizamos
-ll1 <- Vectorize(ll1)
-
-# Mostramos su gráfica
-curve(ll1,
-      lwd = 4, col = "dodgerblue3"
+qqplot(
+    y = apartamentos$mt2, pch = 19,
+    x = qnorm(ppoints(apartamentos$mt2),
+        mean = fit1$estimate[1],
+        sd = fit1$estimate[2]
+    )
 )
 
+# Dibujar un gráfico de contornos para la función de log-verosimilitud
+# de la distribución normal del valor en escritura de los apartamentos
+fit2 <- fitdistr(x = apartamentos$avaluo, densfun = "normal")
 
+qqplot(
+    y = apartamentos$avaluo, pch = 19,
+    x = qnorm(ppoints(apartamentos$avaluo),
+        mean = fit2$estimate[1],
+        sd = fit2$estimate[2]
+    )
+)
 
-heatmap(ll1)
+# Dibujar un gráfico de contornos para la función de log-verosimilitud
+# de la distribución normal estrato socioeconomico de los apartamentos
+fit3 <- fitdistr(x = apartamentos$estrato, densfun = "normal")
 
-
-
-#heatmap(cor(apartamentos_tmp[,c('precio', 'mt2', 'avaluo', 'estrato')]))
-
+qqplot(
+    y = apartamentos$estrato, pch = 19,
+    x = qnorm(ppoints(apartamentos$estrato),
+        mean = fit3$estimate[1],
+        sd = fit3$estimate[2]
+    )
+)
 
 # ¿Cuál de los dos modelos es más apropiado para explicar la variable de
 # interés? Calcule el AIC para decidir.
 
+print(paste(
+    "El valor de AIC para esta función de log-verosimilitud
+    basada en los metros cuadrados del apartamento es de: ",
+    AIC(fit1)
+))
+
+
+print(paste(
+    "El valor de AIC para esta función de log-verosimilitud
+    basada en el valor de la escritura del apartamento es de: ",
+    AIC(fit2)
+))
+
+print(paste(
+    "El valor de AIC para esta función de log-verosimilitud
+    basada en el estrato o  nivel socieconomico donde está el
+    apartamento es de: ",
+    AIC(fit3)
+))
+
+print("El modelo más adecuado para explicar la variable de interés es
+el correspondiente al estrato o nivel socioeconómico donde está el
+apartamento, puesto que si valor de AIC es el más bajo")
 
 # 4.- Considere el siguiente modelo de regresión.
 # yi ~ Gamma(shapei, scalei)
@@ -212,11 +247,32 @@ heatmap(ll1)
 # x2~Poisson(<U+03BB>=3)
 # Simule 100 observaciones del modelo anterior.
 
+n <- 100
+x1 <- runif(n, 0, 1)
+x2 <- rpois(n, lambda = 3)
 
 # Escriba el vector de parámetros del problema.
 
-
+shape <- exp(3 - 7 * x1)
+scale <- exp(3 - x2)
+y <- rgamma(n, shape, scale)
 # Construya la función minusll para el problema.
 
+ll <- function(param) {
+    shape <- param[1] # param es el vector de parámetros
+    scale <- param[2]
+    sum(rgamma(n = y, shape = shape, scale = scale))
+}
 
-# Use la función optim para estimar los parámetros del problema.
+# Use la función optim para estimar los parámetros del problema
+
+res <- optim(
+    par = c(0, 0, 1),
+    fn = minusll,
+    method = "L-BFGS-B",
+    lower = c(-Inf, -Inf, 0),
+    upper = c(Inf, Inf, Inf),
+    y = y,
+    x1 = x1
+)
+print(res)
