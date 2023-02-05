@@ -47,7 +47,7 @@ if (aic_fit1[1] < aic_fit2[1]) {
 # responda lo siguiente.
 # Suponga que el número de satélites sobre cada hembra es una variable que
 # se distribuye Poisson. Construya en R la función de log-verosimilitud l,
-# dibuje la función l y encuentre el estimador de máxima verosimilitud de <U+03BB>.
+# dibuje la función l y encuentre el estimador de máxima verosimilitud de λ.
 
 
 url <- "https://raw.githubusercontent.com/fhernanb/datos/master/crab"
@@ -244,7 +244,7 @@ apartamento, puesto que si valor de AIC es el más bajo")
 # log(shapei)=3-7x1
 # log(scalei)=3-1x2
 # x1~U(0,1)
-# x2~Poisson(<U+03BB>=3)
+# x2~Poisson(λ=3)
 # Simule 100 observaciones del modelo anterior.
 
 n <- 100
