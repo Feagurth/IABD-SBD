@@ -46,6 +46,7 @@ print("De este analisis no podemos asegurar que los datos no provengan de una
       distribución normal, pero tampoco podemos asegurarlo")
 
 # Dibujamos las graficas QQPlot de las alturas de hombres y mujeres
+install.packages(car)
 require(car)
 
 qqPlot(
@@ -72,6 +73,7 @@ print("En el caso de los hombre la mayoría de los valores se encuentran tambié
 lapply(alturas, shapiro.test)
 
 # Prueba Anderson-Darling
+install.packages(nortest)
 require(nortest)
 lapply(alturas, ad.test)
 
